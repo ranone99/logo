@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إنشاء بطاقة بيانات</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            padding: 20px;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #2c3e50, #3498db);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        h1 {
+            margin-bottom: 10px;
+        }
+        
+        .content {
+            display: flex;
+            flex-wrap: wrap;
+            padding: 20px;
+        }
+        
+        .form-section {
+            flex: 1;
+            min-width: 300px;
+            padding: 20px;
+        }
+        
+        .card-section {
+            flex: 1;
+            min-width: 300px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: border 0.3s;
+        }
+        
+        input:focus, select:focus {
+            border-color: #3498db;
+            outline: none;
+        }
+        
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+            width: 100%;
+        }
+        
+        button:hover {
+            background-color: #2980b9;
+        }
+        
+        .card {
+            width: 400px;
+            background: linear-gradient(135deg, #3498db, #2c3e50);
+            color: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url('https://images.unsplash.com/photo-1558591710-4b4a1ae0f04d?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.2; /* درجة الشفافية الافتراضية */
+            z-index: 1;
+        }
+        
+        .card-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+           
+            padding-bottom: 10px;
+        }
+        
+        .card-title {
+            font-size: 22px;
+            font-weight: bold;
+        }
+        
+        .card-logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+        .card-details {
+            margin-bottom: 20px;
+        }
+        
+        .card-field {
+            margin-bottom: 15px;
+
+            justify-content: space-between;
+        }
+        
+        .field-label {
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        
+        .field-value {
+		font-weight: bold;
+            text-align: left;
+        }
+        
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .download-btn {
+            background-color: #e74c3c;
+            width: auto;
+            padding: 10px 20px;
+        }
+        
+        .download-btn:hover {
+            background-color: #c0392b;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .opacity-control {
+            margin-top: 15px;
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+        }
+        
+        .opacity-control label {
+            margin-bottom: 10px;
+            display: block;
+        }
+        
+        .opacity-slider {
+            width: 100%;
+            margin: 10px 0;
+        }
+        
+        .opacity-value {
+            text-align: center;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        @media (max-width: 768px) {
+            .content {
+                flex-direction: column;
+            }
+            
+            .card {
+                width: 100%;
+                max-width: 350px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>نظام إنشاء بطاقة البيانات</h1>
+            <p>أدخل بياناتك للحصول على بطاقة شخصية</p>
+        </header>
+        
+        <div class="content">
+            <div class="form-section">
+                <h2>أدخل بياناتك</h2>
+                <form id="dataForm">
+                    <div class="form-group">
+                        <label for="name">الاسم الكامل</label>
+                        <input type="text" id="name" placeholder="أدخل اسمك الكامل" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="accountNumber">رقم الحساب</label>
+                        <input type="text" id="accountNumber" placeholder="أدخل رقم الحساب" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="branch">الفرع</label>
+                        <input type="text" id="branch" placeholder="أدخل اسم الفرع" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="noticeNumber">رقم الإشعار</label>
+                        <input type="text" id="noticeNumber" placeholder="أدخل رقم الإشعار" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="backgroundSelect">اختر صورة الخلفية</label>
+                        <select id="backgroundSelect">
+                            <option value="1">خلفية 1 (طبيعة)</option>
+                            <option value="2">خلفية 2 (تجريدية)</option>
+                            <option value="3">خلفية 3 (تكنولوجيا)</option>
+                            <option value="4">خلفية 4 (بسيطة)</option>
+                        </select>
+                    </div>
+                    
+                    <button type="submit">موافقة وإنشاء البطاقة</button>
+					<div class="card-footer">
+                            <div class="card-date" id="cardDate">-</div>
+                            <button class="download-btn" id="downloadBtn">تحميل البطاقة</button>
+                        </div>
+                </form>
+                
+                <div class="opacity-control">
+                    <label for="opacitySlider">تحكم في شفافية الخلفية:</label>
+                    <input type="range" id="opacitySlider" class="opacity-slider" min="0" max="100" value="100">
+                    <div class="opacity-value">شفافية: <span id="opacityValue">100%</span></div>
+                </div>
+            </div>
+            
+            <div class="card-section">
+                <h2>البطاقة الشخصية</h2>
+                <div id="card" class="card hidden">
+                    <div class="card-content">
+                        <div class="card-header">
+                            <div class="card-title">بنكك</div>
+                           
+                        </div>
+                        
+                        <div class="card-details">
+                            <div class="card-field">
+                                <span class="field-label">الاسم:</span>
+                                <span class="field-value" id="cardName">-</span>
+                            </div>
+                            
+                            <div class="card-field">
+                                <span class="field-label">رقم الحساب:</span>
+                                <span class="field-value" id="cardAccount">-</span>
+                            </div>
+                            
+                            <div class="card-field">
+                                <span class="field-label">الفرع:</span>
+                                <span class="field-value" id="cardBranch">-</span>
+                            </div>
+                            
+                            <div class="card-field">
+                                <span class="field-label">رقم الإشعار:</span>
+                                <span class="field-value" id="cardNotice">-</span>
+                            </div>
+                        </div>
+                        
+                        
+                    </div>
+                </div>
+                
+                <div id="noCardMessage" class="no-card">
+                    <p>سيظهر هنا بطاقتك بعد إدخال البيانات</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- مكتبة html2canvas لالتقاط الصورة -->
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    
+    <script>
+        // مصفوفة تحتوي على روابط صور الخلفية
+        const backgroundImages = {
+            1: 'https://github.com/ranone99/logo/blob/main/r.png?raw=true',
+            2: 'https://images.unsplash.com/photo-1550684376-efcbd6e3f031?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
+            3: 'https://images.unsplash.com/photo-1518709268805-4e9042af2176?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
+            4: 'https://images.unsplash.com/photo-1558618666-fcd25856cd23?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60'
+        };
+        
+        // متغير لتخزين عنصر البطاقة
+        const cardElement = document.getElementById('card');
+        
+        // دالة لتحديث صورة الخلفية وشفافيتها
+        function updateCardBackground() {
+            const backgroundId = document.getElementById('backgroundSelect').value;
+            const opacityValue = document.getElementById('opacitySlider').value / 100;
+            
+            // إنشاء عنصر نمط ديناميكي
+            let styleElement = document.getElementById('cardBackgroundStyle');
+            if (!styleElement) {
+                styleElement = document.createElement('style');
+                styleElement.id = 'cardBackgroundStyle';
+                document.head.appendChild(styleElement);
+            }
+            
+            // تحديث النمط مع الصورة والشفافية المحددة
+            styleElement.textContent = `
+                .card::before {
+                    background-image: url('${backgroundImages[backgroundId]}');
+                    opacity: ${opacityValue};
+                }
+            `;
+        }
+        
+        // إضافة مستمعي الأحداث
+        document.getElementById('dataForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // الحصول على القيم من النموذج
+            const name = document.getElementById('name').value;
+            const accountNumber = document.getElementById('accountNumber').value;
+            const branch = document.getElementById('branch').value;
+            const noticeNumber = document.getElementById('noticeNumber').value;
+            
+            // تحديث البطاقة بالقيم الجديدة
+            document.getElementById('cardName').textContent = name;
+            document.getElementById('cardAccount').textContent = accountNumber;
+            document.getElementById('cardBranch').textContent = branch;
+            document.getElementById('cardNotice').textContent = noticeNumber;
+			
+            
+            // تحديث الخلفية
+            updateCardBackground();
+            
+            
+            // إظهار البطاقة وإخفاء الرسالة
+            document.getElementById('card').classList.remove('hidden');
+            document.getElementById('noCardMessage').classList.add('hidden');
+        });
+        
+        // تحديث شفافية الخلفية عند تحريك المنزلق
+        document.getElementById('opacitySlider').addEventListener('input', function() {
+            document.getElementById('opacityValue').textContent = this.value + '%';
+            if (!cardElement.classList.contains('hidden')) {
+                updateCardBackground();
+            }
+        });
+        
+        // تحديث الخلفية عند تغيير الاختيار
+        document.getElementById('backgroundSelect').addEventListener('change', function() {
+            if (!cardElement.classList.contains('hidden')) {
+                updateCardBackground();
+            }
+        })
+		
+        // تحميل البطاقة كصورة
+        document.getElementById('downloadBtn').addEventListener('click', function() {
+            html2canvas(document.getElementById('card')).then(function(canvas) {
+                const link = document.createElement('a');
+                link.download = 'بطاقة-البيانات.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+				
+            });
+        });
+    </script>
+</body>
+</html>
