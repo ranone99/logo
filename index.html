@@ -383,181 +383,135 @@
     <!-- مكتبة html2canvas لالتقاط الصورة -->
    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     
-<script>
-    // مصفوفة تحتوي على روابط صور الخلفية
-    const backgroundImages = {
-        1: 'https://i.imgur.com/zb0fVzA.png',
-        2: 'https://i.imgur.com/XfWe8i8.png',
-        3: 'https://i.imgur.com/THe36af.png',
-        4: 'https://i.imgur.com/THe36af.png',
-        5: 'https://i.imgur.com/ZgVjwAA.png',
-        6: 'https://i.imgur.com/xopUnsV.png'
-    };
+ <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    
+    <script>
+        // مصفوفة تحتوي على روابط صور الخلفية
+        const backgroundImages = {
+            1: 'https://i.imgur.com/zb0fVzA.png',
+            2: 'https://i.imgur.com/XfWe8i8.png',
+            3: 'https://i.imgur.com/THe36af.png',
+            4: 'https://i.imgur.com/THe36af.png',
+            5: 'https://i.imgur.com/ZgVjwAA.png',
+            6: 'https://i.imgur.com/xopUnsV.png'
+        };
 
-    // دالة محسنة لتحميل الصورة مع التأكد من اكتمال التحميل
-    function loadImageCompletely(url) {
-        return new Promise((resolve, reject) => {
+        // دالة لتحميل الصورة وتأكيد تحميلها قبل استخدام html2canvas
+        function loadImage(url, callback) {
             const img = new Image();
             img.crossOrigin = 'anonymous';
-            
             img.onload = function() {
-                // انتظار إضافي للتأكد من اكتمال تحميل البيانات
-                setTimeout(() => {
-                    resolve(img);
-                }, 200);
+                callback(img);
             };
-            
             img.onerror = function() {
                 console.error('فشل تحميل الصورة:', url);
-                reject(new Error(`فشل تحميل الصورة: ${url}`));
+                const fallbackImg = new Image();
+                fallbackImg.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTAwIiBoZWlnaHQ9IjUwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cmVjdCB3aWR0aD0iNTAwIiBoZWlnaHQ9IjUwMCIgZmlsbD0iIzM0OThkYiIvPgo8L3N2Zz4K';
+                fallbackImg.onload = function() {
+                    callback(fallbackImg);
+                };
             };
+            img.src = url;
+        }
+
+        // دالة لتحديث صورة الخلفية وشفافيتها
+        function updateCardBackground() {
+            const backgroundId = document.getElementById('backgroundSelect').value;
+            const opacityValue = document.getElementById('opacitySlider').value / 100;
+            const selectedImage = backgroundImages[backgroundId];
             
-            // إضافة timestamp لمنع التخزين المؤقت
-            const uniqueUrl = url + (url.includes('?') ? '&' : '?') + 't=' + Date.now();
-            img.src = uniqueUrl;
+            const cardBackground = document.getElementById('cardBackground');
+            cardBackground.style.backgroundImage = `url('${selectedImage}')`;
+            cardBackground.style.opacity = opacityValue;
+        }
+
+        // إضافة مستمعي الأحداث
+        document.getElementById('dataForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // الحصول على القيم من النموذج
+            const name = document.getElementById('name').value;
+            const accountNumber = document.getElementById('accountNumber').value;
+            const branch = document.getElementById('branch').value;
+            const noticeNumber = document.getElementById('noticeNumber').value;
+            
+            // تحديث البطاقة بالقيم الجديدة
+            document.getElementById('cardName').textContent = name;
+            document.getElementById('cardAccount').textContent = accountNumber;
+            document.getElementById('cardBranch').textContent = branch;
+            document.getElementById('cardNotice').textContent = noticeNumber;
+            
+            // تحديث الخلفية
+            updateCardBackground();
+            
+            // إظهار البطاقة وإخفاء الرسالة
+            document.getElementById('card').classList.remove('hidden');
+            document.getElementById('noCardMessage').classList.add('hidden');
         });
-    }
-
-    // دالة لتحديث صورة الخلفية وشفافيتها
-    function updateCardBackground() {
-        const backgroundId = document.getElementById('backgroundSelect').value;
-        const opacityValue = document.getElementById('opacitySlider').value / 100;
-        const selectedImage = backgroundImages[backgroundId];
         
-        const cardBackground = document.getElementById('cardBackground');
+        // تحديث شفافية الخلفية عند تحريك المنزلق
+        document.getElementById('opacitySlider').addEventListener('input', function() {
+            document.getElementById('opacityValue').textContent = this.value + '%';
+            if (!document.getElementById('card').classList.contains('hidden')) {
+                updateCardBackground();
+            }
+        });
         
-        // إضافة timestamp لمنع التخزين المؤقت
-        const timestamp = Date.now();
-        const uniqueImageUrl = `${selectedImage}${selectedImage.includes('?') ? '&' : '?'}t=${timestamp}`;
+        // تحديث الخلفية عند تغيير الاختيار
+        document.getElementById('backgroundSelect').addEventListener('change', function() {
+            if (!document.getElementById('card').classList.contains('hidden')) {
+                updateCardBackground();
+            }
+        });
         
-        cardBackground.style.backgroundImage = `url('${uniqueImageUrl}')`;
-        cardBackground.style.opacity = opacityValue;
-    }
-
-    // إضافة مستمعي الأحداث
-    document.getElementById('dataForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        // الحصول على القيم من النموذج
-        const name = document.getElementById('name').value;
-        const accountNumber = document.getElementById('accountNumber').value;
-        const branch = document.getElementById('branch').value;
-        const noticeNumber = document.getElementById('noticeNumber').value;
-        
-        // تحديث البطاقة بالقيم الجديدة
-        document.getElementById('cardName').textContent = name;
-        document.getElementById('cardAccount').textContent = accountNumber;
-        document.getElementById('cardBranch').textContent = branch;
-        document.getElementById('cardNotice').textContent = noticeNumber;
-        
-        // تحديث الخلفية
-        updateCardBackground();
-        
-        // إظهار البطاقة وإخفاء الرسالة
-        document.getElementById('card').classList.remove('hidden');
-        document.getElementById('noCardMessage').classList.add('hidden');
-    });
-    
-    // تحديث شفافية الخلفية عند تحريك المنزلق
-    document.getElementById('opacitySlider').addEventListener('input', function() {
-        document.getElementById('opacityValue').textContent = this.value + '%';
-        if (!document.getElementById('card').classList.contains('hidden')) {
-            updateCardBackground();
-        }
-    });
-    
-    // تحديث الخلفية عند تغيير الاختيار
-    document.getElementById('backgroundSelect').addEventListener('change', function() {
-        if (!document.getElementById('card').classList.contains('hidden')) {
-            updateCardBackground();
-        }
-    });
-    
-    // تحميل البطاقة كصورة مع حل مشكلة الجودة
-    document.getElementById('downloadBtn').addEventListener('click', function() {
-        const downloadBtn = document.getElementById('downloadBtn');
-        const loadingMessage = document.getElementById('loadingMessage');
-        
-        // إظهار رسالة التحميل
-        downloadBtn.disabled = true;
-        loadingMessage.style.display = 'block';
-        loadingMessage.textContent = 'جاري تحميل الصورة وتحسين الجودة...';
-        
-        const backgroundId = document.getElementById('backgroundSelect').value;
-        const selectedImage = backgroundImages[backgroundId];
-        
-        // استخدام الدالة المحسنة لتحميل الصورة
-        loadImageCompletely(selectedImage)
-            .then(() => {
-                // إعدادات html2canvas محسنة
-                const cardElement = document.getElementById('card');
-                
-                return html2canvas(cardElement, {
+        // تحميل البطاقة كصورة مع أبعاد ثابتة - التصحيح هنا فقط
+        document.getElementById('downloadBtn').addEventListener('click', function() {
+            const downloadBtn = document.getElementById('downloadBtn');
+            const loadingMessage = document.getElementById('loadingMessage');
+            
+            // إظهار رسالة التحميل
+            downloadBtn.disabled = true;
+            loadingMessage.style.display = 'block';
+            
+            // الحصول على الخلفية الحالية
+            const backgroundId = document.getElementById('backgroundSelect').value;
+            const selectedImage = backgroundImages[backgroundId];
+            
+            // تحميل الصورة أولاً للتأكد من جاهزيتها
+            loadImage(selectedImage, function() {
+                // استخدام أبعاد ثابتة للبطاقة عند التحميل - التصحيح هنا
+               
+                 const cardElement = document.getElementById('card');
+                html2canvas(cardElement, {
                     useCORS: true,
                     allowTaint: false,
-                    scale: 2, // تقليل الـ scale لتجنب مشاكل الذاكرة
-                    logging: true,
-                    backgroundColor: null,
-                    removeContainer: true,
-                    async: true,
-                    onclone: function(clonedDoc, element) {
-                        // تحديث الصورة في العنصر المستنسخ مع timestamp جديد
-                        const clonedBackground = clonedDoc.getElementById('cardBackground');
-                        if (clonedBackground) {
-                            const timestamp = Date.now();
-                            const uniqueImageUrl = `${selectedImage}${selectedImage.includes('?') ? '&' : '?'}t=${timestamp}`;
-                            clonedBackground.style.backgroundImage = `url('${uniqueImageUrl}')`;
-                        }
-                    }
+                    scale: 3, // استخدام scale فقط
+                    logging: false,
+                    // إزالة width و height و windowWidth و windowHeight
+                    // لأنها تسبب المشكلة في تغيير الحجم
+                }).then(function(canvas) {
+                    const link = document.createElement('a');
+                    link.download = 'بطاقة-البيانات.png';
+                    link.href = canvas.toDataURL('image/png');
+                    link.click();
+                    
+                    // إعادة تفعيل الزر وإخفاء رسالة التحميل
+                    downloadBtn.disabled = false;
+                    loadingMessage.style.display = 'none';
+                }).catch(function(error) {
+                    console.error('Error generating card:', error);
+                    alert('حدث خطأ في إنشاء البطاقة. يرجى المحاولة مرة أخرى.');
+                    
+                    // إعادة تفعيل الزر وإخفاء رسالة التحميل
+                    downloadBtn.disabled = false;
+                    loadingMessage.style.display = 'none';
                 });
-            })
-            .then(function(canvas) {
-                // تحسين جودة الصورة النهائية
-                const finalCanvas = document.createElement('canvas');
-                const ctx = finalCanvas.getContext('2d');
-                
-                // تعيين أبعاد عالية الجودة
-                finalCanvas.width = canvas.width;
-                finalCanvas.height = canvas.height;
-                
-                // تعبئة الخلفية البيضاء أولاً
-                ctx.fillStyle = '#ffffff';
-                ctx.fillRect(0, 0, finalCanvas.width, finalCanvas.height);
-                
-                // رسم الصورة الأصلية
-                ctx.drawImage(canvas, 0, 0);
-                
-                const link = document.createElement('a');
-                link.download = 'بطاقة-البيانات.png';
-                link.href = finalCanvas.toDataURL('image/png', 1.0); // جودة 100%
-                link.click();
-                
-                // إعادة تفعيل الزر وإخفاء رسالة التحميل
-                downloadBtn.disabled = false;
-                loadingMessage.style.display = 'none';
-            })
-            .catch(function(error) {
-                console.error('Error generating card:', error);
-                alert('حدث خطأ في إنشاء البطاقة. يرجى المحاولة مرة أخرى أو تحديث الصفحة.');
-                
-                // إعادة تفعيل الزر وإخفاء رسالة التحميل
-                downloadBtn.disabled = false;
-                loadingMessage.style.display = 'none';
             });
-    });
-
-    // تهيئة أولية
-    updateCardBackground();
-
-    // تحسين أداء الصور
-    window.addEventListener('load', function() {
-        // تحميل مسبق للصور لتحسين الأداء
-        Object.values(backgroundImages).forEach(url => {
-            const img = new Image();
-            img.src = url;
         });
-    });
-</script>
-	
+
+        // تهيئة أولية
+        updateCardBackground();
+    </script>
+
 </body>
 </html>
