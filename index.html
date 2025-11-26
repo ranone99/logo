@@ -486,10 +486,8 @@
                 html2canvas(cardElement, {
                   useCORS: true,
         allowTaint: false,
-        scale: 3,                 // جودة عالية
-        width: 1080,              // عرض ثابت مناسب للواتساب
-        height: 675,              // ارتفاع مناسب لنسب البطاقة
-        logging: false,
+        scale: 2,                 // جودة عالية
+             logging: false,
         backgroundColor: null
                 }).then(function(canvas) {
                     const link = document.createElement('a');
