@@ -479,18 +479,6 @@
             
             // تحميل الصورة أولاً للتأكد من جاهزيتها
             loadImage(selectedImage, function() {
-               
-				
-				
-				
-				// استخدام أبعاد ثابتة للبطاقة عند التحميل - التصحيح هنا
-               document.getElementById('downloadBtn').addEventListener('click', function () {
-    const downloadBtn = document.getElementById('downloadBtn');
-    const loadingMessage = document.getElementById('loadingMessage');
-
-    downloadBtn.disabled = true;
-    loadingMessage.style.display = 'block';
-
                  const cardElement = document.getElementById('card');
                 html2canvas(cardElement, {
         useCORS: true,
