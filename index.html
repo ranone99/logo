@@ -386,8 +386,7 @@
     
   <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <script src="https://unpkg.com/dom-to-image-more@2.9.0/dist/dom-to-image-more.min.js"></script>
-
-    <script>
+ <script>
         // مصفوفة تحتوي على روابط صور الخلفية
         const backgroundImages = {
             1: 'https://i.imgur.com/zb0fVzA.png',
@@ -483,49 +482,33 @@
             loadImage(selectedImage, function() {
                 // استخدام أبعاد ثابتة للبطاقة عند التحميل - التصحيح هنا
                
-                document.getElementById('downloadBtn').addEventListener('click', function () {
-    const btn = this;
-    const loading = document.getElementById('loadingMessage');
-    const node = document.getElementById('card');
-
-    btn.disabled = true;
-    loading.style.display = 'block';
-
-    // أبعاد الخرج المطلوبة (مثال 1080x675). لو تريد نفس قياس المعاينة استخدم node.offsetWidth/offsetHeight
-    const targetWidth = 1080;
-    const targetHeight = 675;
-
-    domtoimage.toPng(node, {
-        width: targetWidth,
-        height: targetHeight,
-        // pixelRatio: 1 يعطي نفس دقة CSS، زدها لتقوية الحدة بدون تكبير الحجم الظاهر
-        pixelRatio: 2, 
-        style: {
-            // تحافظ على اتجاه الخط و RTL لو محتاج
-            transform: 'scale(1)',
-            transformOrigin: 'top left'
-        },
-        bgcolor: null, // لو تريد خلفية شفافة اجعلها null
-        filter: function (node) {
-            // تمنع أي عنصر لا تريده أن يظهر
-            return true;
-        }
-    })
-    .then(function (dataUrl) {
-        const a = document.createElement('a');
-        a.href = dataUrl;
-        a.download = 'bankak-card.png';
-        a.click();
-    })
-    .catch(function (err) {
-        console.error('dom-to-image error:', err);
-        alert('فشل حفظ الصورة. افتح الكونسول للتفاصيل.');
-    })
-    .finally(function () {
-        btn.disabled = false;
-        loading.style.display = 'none';
-    });
-});
+                 const cardElement = document.getElementById('card');
+                html2canvas(cardElement, {
+                    useCORS: true,
+                    allowTaint: false,
+                    scale: 3, // استخدام scale فقط
+                    logging: false,
+                    // إزالة width و height و windowWidth و windowHeight
+                    // لأنها تسبب المشكلة في تغيير الحجم
+                }).then(function(canvas) {
+                    const link = document.createElement('a');
+                    link.download = 'بطاقة-البيانات.png';
+                    link.href = canvas.toDataURL('image/png');
+                    link.click();
+                    
+                    // إعادة تفعيل الزر وإخفاء رسالة التحميل
+                    downloadBtn.disabled = false;
+                    loadingMessage.style.display = 'none';
+                }).catch(function(error) {
+                    console.error('Error generating card:', error);
+                    alert('حدث خطأ في إنشاء البطاقة. يرجى المحاولة مرة أخرى.');
+                    
+                    // إعادة تفعيل الزر وإخفاء رسالة التحميل
+                    downloadBtn.disabled = false;
+                    loadingMessage.style.display = 'none';
+                });
+            });
+        });
 
         // تهيئة أولية
         updateCardBackground();
