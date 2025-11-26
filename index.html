@@ -170,7 +170,7 @@
         
         .card-field {
             margin-bottom: 12px;
-            
+            font-size: 13px;
             justify-content: space-between;
         }
         
@@ -252,8 +252,8 @@
 <body>
     <div class="container">
         <header>
-            <h1>نظام إنشاء بطاقة البيانات</h1>
-            <p>أدخل بياناتك للحصول على بطاقة شخصية</p>
+            <h1>نظام انشاء بطاقة بنكك</h1>
+            <p>طريق التقنية مع مصطفي - TechWay</p>
         </header>
         
         <div class="content">
@@ -300,7 +300,7 @@
                     </div>
                 </form>
                 
-                <div class="opacity-control">
+                <div class="opacity-control" style="display:none">
                     <label for="opacitySlider">تحكم في شفافية الخلفية:</label>
                     <input type="range" id="opacitySlider" class="opacity-slider" min="0" max="100" value="100">
                     <div class="opacity-value">شفافية: <span id="opacityValue">100%</span></div>
@@ -308,13 +308,13 @@
             </div>
             
             <div class="card-section">
-                <h2>البطاقة الشخصية</h2>
+                <h2>تصميم بطاقة بنكك</h2>
                 <div class="card-container">
                     <div id="card" class="card hidden">
                         <div class="card-background" id="cardBackground"></div>
                         <div class="card-content">
                             <div class="card-header">
-                                <div class="card-title">بنــكك</div>
+                                <div class="card-title">&nbsp;&nbsp;&nbsp;بنــكك</div>
                             </div>
                             
                             <div class="card-details">
@@ -337,9 +337,10 @@
                                     <span class="field-label">رقم الإشعار:</span>
                                     <span class="field-value" id="cardNotice">-</span>
                                 </div>
-								
+								<br>
+								<p style="text-align:center; font-size:5px; margin-top:-5px">TechWay - طريق التقنية</p>
                             </div>
-							<p style="text-align:center; font-size:5px">TechWay - طريق التقنية</p>
+							
                         </div>
                     </div>
                 </div>
@@ -347,7 +348,7 @@
                 <div class="loading" id="loadingMessage">جاري تحميل الصورة...</div>
                 
                 <div id="noCardMessage">
-                    <p>سيظهر هنا بطاقتك بعد إدخال البيانات</p>
+                    <p>ستظهر صورة بطاقتك هنا</p>
                 </div>
             </div>
         </div>
