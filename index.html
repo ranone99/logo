@@ -466,36 +466,39 @@
         });
         
         // تحميل البطاقة كصورة مع أبعاد ثابتة - التصحيح هنا فقط
-        document.getElementById('downloadBtn').addEventListener('click', function() {
-            const downloadBtn = document.getElementById('downloadBtn');
-            const loadingMessage = document.getElementById('loadingMessage');
-            
-            // إظهار رسالة التحميل
-            downloadBtn.disabled = true;
-            loadingMessage.style.display = 'block';
-            
-            // الحصول على الخلفية الحالية
-            const backgroundId = document.getElementById('backgroundSelect').value;
-            const selectedImage = backgroundImages[backgroundId];
-            
-            // تحميل الصورة أولاً للتأكد من جاهزيتها
-            loadImage(selectedImage, function() {
-                // استخدام أبعاد ثابتة للبطاقة عند التحميل - التصحيح هنا
-               
-                 const cardElement = document.getElementById('card');
-                html2canvas(cardElement, {
-                    useCORS: true,
-                    allowTaint: false,
-                    backgroundColor: null,
-					scale: 2, // استخدام scale فقط
-                    logging: false,
-					
-    width: 1200,
-    height: 800,
-					
-                    // إزالة width و height و windowWidth و windowHeight
-                    // لأنها تسبب المشكلة في تغيير الحجم
-                }).then(function(canvas) {
+       document.getElementById('downloadBtn').addEventListener('click', function () {
+    const downloadBtn = document.getElementById('downloadBtn');
+    const loadingMessage = document.getElementById('loadingMessage');
+
+    downloadBtn.disabled = true;
+    loadingMessage.style.display = 'block';
+
+    const cardElement = document.getElementById('card');
+
+    html2canvas(cardElement, {
+        useCORS: true,
+        allowTaint: false,
+        scale: 3,                 // جودة عالية
+        width: 1080,              // عرض ثابت مناسب للواتساب
+        height: 675,              // ارتفاع مناسب لنسب البطاقة
+        logging: false,
+        backgroundColor: null
+    }).then(function (canvas) {
+        const link = document.createElement('a');
+        link.download = 'bankak-card.png';
+        link.href = canvas.toDataURL('image/png', 1.0);  // جودة 100%
+        link.click();
+
+        downloadBtn.disabled = false;
+        loadingMessage.style.display = 'none';
+    }).catch(function (error) {
+        console.error('Error generating card:', error);
+        alert('حدث خطأ أثناء إنشاء البطاقة.');
+        downloadBtn.disabled = false;
+        loadingMessage.style.display = 'none';
+    });
+});
+}).then(function(canvas) {
                     const link = document.createElement('a');
                     link.download = 'بطاقة-البيانات.png';
                     link.href = canvas.toDataURL('image/png');
