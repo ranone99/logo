@@ -9,8 +9,8 @@
 
         /* التصميم الدائري للأيقونات */
         .icon-circle {
-            width: 60px;
-            height: 60px;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -165,8 +165,8 @@
         }
 
         .floating-icon {
-            width: 60px;
-            height: 60px;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -248,9 +248,9 @@
             }
             
             .icon-circle {
-                width: 50px;
-                height: 50px;
-                font-size: 20px;
+                width: 30px;
+                height: 30px;
+                font-size: 15px;
             }
             
             .icon-square {
@@ -260,4 +260,5 @@
             }
 
         }
+
 
