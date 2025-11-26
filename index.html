@@ -102,7 +102,7 @@
         }
         
         .card {
-            width: 400px;
+             width: 400px;
             background: linear-gradient(135deg, #3498db, #2c3e50);
             color: white;
             border-radius: 15px;
@@ -113,17 +113,15 @@
             overflow: hidden;
         }
         
-        .card::before {
-            content: "";
+        .card-background {
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background-image: url('https://images.unsplash.com/photo-1558591710-4b4a1ae0f04d?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60');
             background-size: cover;
             background-position: center;
-            opacity: 0.2; /* درجة الشفافية الافتراضية */
+            opacity: 0.2;
             z-index: 1;
         }
         
@@ -137,7 +135,7 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 20px;
-           
+            
             padding-bottom: 10px;
         }
         
@@ -147,8 +145,12 @@
         }
         
         .card-logo {
-            font-size: 24px;
-            font-weight: bold;
+            width: 50px;
+            height: 50px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTAiIGhlaWdodD0iNTAiIHZpZXdCb3g9IjAgMCA1MCA1MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMjUiIGN5PSIyNSIgcj0iMjAiIGZpbGw9IiNmZmYiLz4KPHBhdGggZD0iTTE1IDI1TDIyIDMyTDM1IDE5IiBzdHJva2U9IiMzNDk4ZGIiIHN0cm9rZS13aWR0aD0iMyIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+Cjwvc3ZnPgo=');
         }
         
         .card-details {
@@ -157,7 +159,7 @@
         
         .card-field {
             margin-bottom: 15px;
-
+           
             justify-content: space-between;
         }
         
@@ -176,7 +178,7 @@
             justify-content: space-between;
             margin-top: 20px;
             padding-top: 15px;
-            border-top: 1px solid rgba(255, 255, 255, 0.3);
+          
         }
         
         .download-btn {
@@ -215,6 +217,13 @@
             text-align: center;
             font-weight: bold;
             color: #2c3e50;
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 10px;
+            color: #3498db;
         }
         
         @media (max-width: 768px) {
@@ -261,18 +270,22 @@
                     </div>
                     
                     <div class="form-group">
-                        <label for="backgroundSelect">اختر صورة الخلفية</label>
+                        <label for="backgroundSelect">اختر لون الخلفية</label>
                         <select id="backgroundSelect">
-                            <option value="1">خلفية 1 (طبيعة)</option>
-                            <option value="2">خلفية 2 (تجريدية)</option>
-                            <option value="3">خلفية 3 (تكنولوجيا)</option>
-                            <option value="4">خلفية 4 (بسيطة)</option>
+                            <option value="1">لون احمر</option>
+                            <option value="2">بمبي</option>
+                            <option value="3">ازرق</option>
+                            <option value="4">بنفسجي</option>
+                            <option value="5">برتقالي</option>
+                            <option value="6">كبدي</option>
                         </select>
                     </div>
                     
+
+                    
                     <button type="submit">موافقة وإنشاء البطاقة</button>
 					<div class="card-footer">
-                            <div class="card-date" id="cardDate">-</div>
+                            <div class="card-date" id="cardDate"></div>
                             <button class="download-btn" id="downloadBtn">تحميل البطاقة</button>
                         </div>
                 </form>
@@ -287,9 +300,10 @@
             <div class="card-section">
                 <h2>البطاقة الشخصية</h2>
                 <div id="card" class="card hidden">
+                    <div class="card-background" id="cardBackground"></div>
                     <div class="card-content">
                         <div class="card-header">
-                            <div class="card-title">بنكك</div>
+                            <div class="card-title">بنــكك</div>
                            
                         </div>
                         
@@ -319,7 +333,9 @@
                     </div>
                 </div>
                 
-                <div id="noCardMessage" class="no-card">
+                <div class="loading" id="loadingMessage">جاري تحميل الصورة...</div>
+                
+                <div id="noCardMessage">
                     <p>سيظهر هنا بطاقتك بعد إدخال البيانات</p>
                 </div>
             </div>
@@ -331,38 +347,47 @@
     
     <script>
         // مصفوفة تحتوي على روابط صور الخلفية
+        // يمكنك تعديل هذه المسارات لوضع صورك المحلية
         const backgroundImages = {
             1: 'https://i.imgur.com/wmitnBW.png',
-            2: 'https://images.unsplash.com/photo-1550684376-efcbd6e3f031?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
-            3: 'https://images.unsplash.com/photo-1518709268805-4e9042af2176?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
-            4: 'https://images.unsplash.com/photo-1558618666-fcd25856cd23?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60'
+            2: 'https://i.imgur.com/XfWe8i8.png',
+            4: 'https://i.imgur.com/THe36af.png',
+            
+            // ضع هنا مسارات الصور المحلية - استبدل هذه الأمثلة بمسارات صورك
+            5: 'https://i.imgur.com/ZgVjwAA.png', // مثال لصورة محلية في مجلد images
+            6: 'https://i.imgur.com/xopUnsV.png'  // مثال لصورة محلية أخرى
         };
-        
-        // متغير لتخزين عنصر البطاقة
-        const cardElement = document.getElementById('card');
-        
+
+        // دالة لتحميل الصورة وتأكيد تحميلها قبل استخدام html2canvas
+        function loadImage(url, callback) {
+            const img = new Image();
+            img.crossOrigin = 'anonymous';
+            img.onload = function() {
+                callback(img);
+            };
+            img.onerror = function() {
+                console.error('فشل تحميل الصورة:', url);
+                // استخدام صورة بديلة في حالة الفشل
+                const fallbackImg = new Image();
+                fallbackImg.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTAwIiBoZWlnaHQ9IjUwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cmVjdCB3aWR0aD0iNTAwIiBoZWlnaHQ9IjUwMCIgZmlsbD0iIzM0OThkYiIvPgo8L3N2Zz4K';
+                fallbackImg.onload = function() {
+                    callback(fallbackImg);
+                };
+            };
+            img.src = url;
+        }
+
         // دالة لتحديث صورة الخلفية وشفافيتها
         function updateCardBackground() {
             const backgroundId = document.getElementById('backgroundSelect').value;
             const opacityValue = document.getElementById('opacitySlider').value / 100;
+            const selectedImage = backgroundImages[backgroundId];
             
-            // إنشاء عنصر نمط ديناميكي
-            let styleElement = document.getElementById('cardBackgroundStyle');
-            if (!styleElement) {
-                styleElement = document.createElement('style');
-                styleElement.id = 'cardBackgroundStyle';
-                document.head.appendChild(styleElement);
-            }
-            
-            // تحديث النمط مع الصورة والشفافية المحددة
-            styleElement.textContent = `
-                .card::before {
-                    background-image: url('${backgroundImages[backgroundId]}');
-                    opacity: ${opacityValue};
-                }
-            `;
+            const cardBackground = document.getElementById('cardBackground');
+            cardBackground.style.backgroundImage = `url('${selectedImage}')`;
+            cardBackground.style.opacity = opacityValue;
         }
-        
+
         // إضافة مستمعي الأحداث
         document.getElementById('dataForm').addEventListener('submit', function(e) {
             e.preventDefault();
@@ -372,18 +397,20 @@
             const accountNumber = document.getElementById('accountNumber').value;
             const branch = document.getElementById('branch').value;
             const noticeNumber = document.getElementById('noticeNumber').value;
+
             
             // تحديث البطاقة بالقيم الجديدة
             document.getElementById('cardName').textContent = name;
             document.getElementById('cardAccount').textContent = accountNumber;
             document.getElementById('cardBranch').textContent = branch;
             document.getElementById('cardNotice').textContent = noticeNumber;
-			
+            
+           
             
             // تحديث الخلفية
             updateCardBackground();
             
-            
+          
             // إظهار البطاقة وإخفاء الرسالة
             document.getElementById('card').classList.remove('hidden');
             document.getElementById('noCardMessage').classList.add('hidden');
@@ -392,28 +419,61 @@
         // تحديث شفافية الخلفية عند تحريك المنزلق
         document.getElementById('opacitySlider').addEventListener('input', function() {
             document.getElementById('opacityValue').textContent = this.value + '%';
-            if (!cardElement.classList.contains('hidden')) {
+            if (!document.getElementById('card').classList.contains('hidden')) {
                 updateCardBackground();
             }
         });
         
         // تحديث الخلفية عند تغيير الاختيار
         document.getElementById('backgroundSelect').addEventListener('change', function() {
-            if (!cardElement.classList.contains('hidden')) {
+            if (!document.getElementById('card').classList.contains('hidden')) {
                 updateCardBackground();
             }
-        })
-		
-        // تحميل البطاقة كصورة
+        });
+        
+        // تحميل البطاقة كصورة مع معالجة الصور أولاً
         document.getElementById('downloadBtn').addEventListener('click', function() {
-            html2canvas(document.getElementById('card')).then(function(canvas) {
-                const link = document.createElement('a');
-                link.download = 'بطاقة-البيانات.png';
-                link.href = canvas.toDataURL('image/png');
-                link.click();
-				
+            const downloadBtn = document.getElementById('downloadBtn');
+            const loadingMessage = document.getElementById('loadingMessage');
+            
+            // إظهار رسالة التحميل
+            downloadBtn.disabled = true;
+            loadingMessage.style.display = 'block';
+            
+            // الحصول على الخلفية الحالية
+            const backgroundId = document.getElementById('backgroundSelect').value;
+            const selectedImage = backgroundImages[backgroundId];
+            
+            // تحميل الصورة أولاً للتأكد من جاهزيتها
+            loadImage(selectedImage, function() {
+                // بعد تحميل الصورة، نقوم بتوليد البطاقة
+                html2canvas(document.getElementById('card'), {
+                    useCORS: true,
+                    allowTaint: false,
+                    scale: 2,
+                    logging: false
+                }).then(function(canvas) {
+                    const link = document.createElement('a');
+                    link.download = 'بطاقة-البيانات.png';
+                    link.href = canvas.toDataURL('image/png');
+                    link.click();
+                    
+                    // إعادة تفعيل الزر وإخفاء رسالة التحميل
+                    downloadBtn.disabled = false;
+                    loadingMessage.style.display = 'none';
+                }).catch(function(error) {
+                    console.error('Error generating card:', error);
+                    alert('حدث خطأ في إنشاء البطاقة. يرجى المحاولة مرة أخرى.');
+                    
+                    // إعادة تفعيل الزر وإخفاء رسالة التحميل
+                    downloadBtn.disabled = false;
+                    loadingMessage.style.display = 'none';
+                });
             });
         });
+
+        // تهيئة أولية
+        updateCardBackground();
     </script>
 </body>
 </html>
