@@ -478,8 +478,8 @@
             // تحميل الصورة أولاً للتأكد من جاهزيتها
             loadImage(selectedImage, function() {
                 // استخدام أبعاد ثابتة للبطاقة عند التحميل - التصحيح هنا
-                const cardElement = document.getElementById('card');
-                
+               
+                const scaleValue = window.innerWidth < 768 ? 3 : 2;
                 html2canvas(cardElement, {
                     useCORS: true,
                     allowTaint: false,
