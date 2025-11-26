@@ -101,14 +101,22 @@
             background-color: #2980b9;
         }
         
+        /* البطاقة بأبعاد ثابتة */
+        .card-container {
+            width: 400px;
+            height: 250px;
+            position: relative;
+            margin-bottom: 20px;
+        }
+        
         .card {
-             width: 400px;
+            width: 100%;
+            height: 100%;
             background: linear-gradient(135deg, #3498db, #2c3e50);
             color: white;
             border-radius: 15px;
             padding: 25px;
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-            margin-bottom: 20px;
             position: relative;
             overflow: hidden;
         }
@@ -128,14 +136,16 @@
         .card-content {
             position: relative;
             z-index: 2;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
         }
         
         .card-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
-            
+            margin-bottom: 15px;
             padding-bottom: 10px;
         }
         
@@ -154,12 +164,13 @@
         }
         
         .card-details {
-            margin-bottom: 20px;
+            flex: 1;
+            margin-bottom: 10px;
         }
         
         .card-field {
-            margin-bottom: 15px;
-           
+            margin-bottom: 12px;
+            
             justify-content: space-between;
         }
         
@@ -169,16 +180,15 @@
         }
         
         .field-value {
-		font-weight: bold;
+            font-weight: bold;
             text-align: left;
         }
         
         .card-footer {
             display: flex;
-            justify-content: space-between;
-            margin-top: 20px;
-            padding-top: 15px;
-          
+            justify-content: center;
+            align-items: center;
+            margin-top: auto;
         }
         
         .download-btn {
@@ -231,9 +241,10 @@
                 flex-direction: column;
             }
             
-            .card {
+            .card-container {
                 width: 100%;
-                max-width: 350px;
+                max-width: 400px;
+                height: 250px;
             }
         }
     </style>
@@ -281,13 +292,12 @@
                         </select>
                     </div>
                     
-
-                    
                     <button type="submit">موافقة وإنشاء البطاقة</button>
-					<div class="card-footer">
-                            <div class="card-date" id="cardDate"></div>
-                            <button class="download-btn" id="downloadBtn">تحميل البطاقة</button>
-                        </div>
+                    
+                    <div class="card-footer">
+                        <div class="card-date" id="cardDate"></div>
+                        <button class="download-btn" id="downloadBtn">تحميل البطاقة</button>
+                    </div>
                 </form>
                 
                 <div class="opacity-control">
@@ -299,37 +309,38 @@
             
             <div class="card-section">
                 <h2>البطاقة الشخصية</h2>
-                <div id="card" class="card hidden">
-                    <div class="card-background" id="cardBackground"></div>
-                    <div class="card-content">
-                        <div class="card-header">
-                            <div class="card-title">بنــكك</div>
-                           
+                <div class="card-container">
+                    <div id="card" class="card hidden">
+                        <div class="card-background" id="cardBackground"></div>
+                        <div class="card-content">
+                            <div class="card-header">
+                                <div class="card-title">بنــكك</div>
+                            </div>
+                            
+                            <div class="card-details">
+                                <div class="card-field">
+                                    <span class="field-label">الاسم:</span>
+                                    <span class="field-value" id="cardName">-</span>
+                                </div>
+                                
+                                <div class="card-field">
+                                    <span class="field-label">رقم الحساب:</span>
+                                    <span class="field-value" id="cardAccount">-</span>
+                                </div>
+                                
+                                <div class="card-field">
+                                    <span class="field-label">الفــــــــــــــــرع:</span>
+                                    <span class="field-value" id="cardBranch">-</span>
+                                </div>
+                                
+                                <div class="card-field">
+                                    <span class="field-label">رقم الإشعار:</span>
+                                    <span class="field-value" id="cardNotice">-</span>
+                                </div>
+								
+                            </div>
+							<p style="text-align:center; font-size:5px">TechWay - طريق التقنية</p>
                         </div>
-                        
-                        <div class="card-details">
-                            <div class="card-field">
-                                <span class="field-label">الاسم:</span>
-                                <span class="field-value" id="cardName">-</span>
-                            </div>
-                            
-                            <div class="card-field">
-                                <span class="field-label">رقم الحساب:</span>
-                                <span class="field-value" id="cardAccount">-</span>
-                            </div>
-                            
-                            <div class="card-field">
-                                <span class="field-label">الفرع:</span>
-                                <span class="field-value" id="cardBranch">-</span>
-                            </div>
-                            
-                            <div class="card-field">
-                                <span class="field-label">رقم الإشعار:</span>
-                                <span class="field-value" id="cardNotice">-</span>
-                            </div>
-                        </div>
-                        
-                        
                     </div>
                 </div>
                 
@@ -347,15 +358,13 @@
     
     <script>
         // مصفوفة تحتوي على روابط صور الخلفية
-        // يمكنك تعديل هذه المسارات لوضع صورك المحلية
         const backgroundImages = {
             1: 'https://i.imgur.com/wmitnBW.png',
             2: 'https://i.imgur.com/XfWe8i8.png',
+            3: 'https://i.imgur.com/THe36af.png',
             4: 'https://i.imgur.com/THe36af.png',
-            
-            // ضع هنا مسارات الصور المحلية - استبدل هذه الأمثلة بمسارات صورك
-            5: 'https://i.imgur.com/ZgVjwAA.png', // مثال لصورة محلية في مجلد images
-            6: 'https://i.imgur.com/xopUnsV.png'  // مثال لصورة محلية أخرى
+            5: 'https://i.imgur.com/ZgVjwAA.png',
+            6: 'https://i.imgur.com/xopUnsV.png'
         };
 
         // دالة لتحميل الصورة وتأكيد تحميلها قبل استخدام html2canvas
@@ -367,7 +376,6 @@
             };
             img.onerror = function() {
                 console.error('فشل تحميل الصورة:', url);
-                // استخدام صورة بديلة في حالة الفشل
                 const fallbackImg = new Image();
                 fallbackImg.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTAwIiBoZWlnaHQ9IjUwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cmVjdCB3aWR0aD0iNTAwIiBoZWlnaHQ9IjUwMCIgZmlsbD0iIzM0OThkYiIvPgo8L3N2Zz4K';
                 fallbackImg.onload = function() {
@@ -397,7 +405,6 @@
             const accountNumber = document.getElementById('accountNumber').value;
             const branch = document.getElementById('branch').value;
             const noticeNumber = document.getElementById('noticeNumber').value;
-
             
             // تحديث البطاقة بالقيم الجديدة
             document.getElementById('cardName').textContent = name;
@@ -405,12 +412,9 @@
             document.getElementById('cardBranch').textContent = branch;
             document.getElementById('cardNotice').textContent = noticeNumber;
             
-           
-            
             // تحديث الخلفية
             updateCardBackground();
             
-          
             // إظهار البطاقة وإخفاء الرسالة
             document.getElementById('card').classList.remove('hidden');
             document.getElementById('noCardMessage').classList.add('hidden');
@@ -431,7 +435,7 @@
             }
         });
         
-        // تحميل البطاقة كصورة مع معالجة الصور أولاً
+        // تحميل البطاقة كصورة مع أبعاد ثابتة
         document.getElementById('downloadBtn').addEventListener('click', function() {
             const downloadBtn = document.getElementById('downloadBtn');
             const loadingMessage = document.getElementById('loadingMessage');
@@ -446,12 +450,18 @@
             
             // تحميل الصورة أولاً للتأكد من جاهزيتها
             loadImage(selectedImage, function() {
-                // بعد تحميل الصورة، نقوم بتوليد البطاقة
-                html2canvas(document.getElementById('card'), {
+                // استخدام أبعاد ثابتة للبطاقة عند التحميل
+                const cardElement = document.getElementById('card');
+                
+                html2canvas(cardElement, {
                     useCORS: true,
                     allowTaint: false,
-                    scale: 2,
-                    logging: false
+                    scale: 3, // زيادة الدقة
+                    width: 400, // عرض ثابت
+                    height: 250, // ارتفاع ثابت
+                    logging: false,
+                    windowWidth: 400,
+                    windowHeight: 250
                 }).then(function(canvas) {
                     const link = document.createElement('a');
                     link.download = 'بطاقة-البيانات.png';
